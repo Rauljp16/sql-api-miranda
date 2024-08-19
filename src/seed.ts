@@ -4,22 +4,22 @@
 //import { createBookings } from "./services/bookingServices";
 import { faker } from "@faker-js/faker";
 import { Icontact, Iroom, Iuser, Ibooking } from "./types/global";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import "dotenv/config";
 
-run().catch((err) => console.log(err));
+// run().catch((err) => console.log(err));
 
-export async function run() {
-    try {
-        await mongoose.connect(process.env.MONGO_URL as string);
-        //createUsers(createRandomUsers(5));
-        //createRooms(createRandomRoom(2));
-        //createContacts(createRandomContact(5));
-        //createBookings(createRandomBooking(10));
-    } catch (error) {
-        console.error("Error in run function:", error);
-    }
-}
+// export async function run() {
+//     try {
+//         await mongoose.connect(process.env.MONGO_URL as string);
+//         //createUsers(createRandomUsers(5));
+//         //createRooms(createRandomRoom(2));
+//         //createContacts(createRandomContact(5));
+//         //createBookings(createRandomBooking(10));
+//     } catch (error) {
+//         console.error("Error in run function:", error);
+//     }
+// }
 
 export function createRandomUsers(count: number): Iuser[] {
     const generateDescription = (name: string) => {
