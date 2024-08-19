@@ -1,0 +1,112 @@
+[
+  {
+    "Name": "John Doe",
+    "id": "001",
+    "OrderDate": "2020-01-15",
+    "CheckIn": "2020-02-20",
+    "CheckOut": "2020-02-25",
+    "SpecialRequest": "Late check-out at 2 PM",
+    "RoomType": "Single Bed",
+    "RoomNumber": "101",
+    "Status": "Check In"
+  },
+  {
+    "Name": "Jane Smith",
+    "id": "002",
+    "OrderDate": "2021-03-12",
+    "CheckIn": "2021-04-05",
+    "CheckOut": "2021-04-10",
+    "SpecialRequest": "Extra pillows",
+    "RoomType": "Double Bed",
+    "RoomNumber": "102",
+    "Status": "In Progress"
+  },
+  {
+    "Name": "Michael Johnson",
+    "id": "003",
+    "OrderDate": "2022-05-08",
+    "CheckIn": "2022-06-15",
+    "CheckOut": "2022-06-20",
+    "SpecialRequest": "High floor room",
+    "RoomType": "Double Superior",
+    "RoomNumber": "103",
+    "Status": "Check Out"
+  },
+  {
+    "Name": "Emily Davis",
+    "id": "004",
+    "OrderDate": "2023-07-03",
+    "CheckIn": "2023-08-12",
+    "CheckOut": "2023-08-17",
+    "SpecialRequest": "Vegetarian breakfast",
+    "RoomType": "Suite",
+    "RoomNumber": "104",
+    "Status": "Check In"
+  },
+  {
+    "Name": "Christopher Brown",
+    "id": "005",
+    "OrderDate": "2024-09-22",
+    "CheckIn": "2024-10-01",
+    "CheckOut": "2024-10-06",
+    "SpecialRequest": "Early check-in at 10 AM",
+    "RoomType": "Single Bed",
+    "RoomNumber": "105",
+    "Status": "In Progress"
+  },
+  {
+    "Name": "Jessica Martinez",
+    "id": "006",
+    "OrderDate": "2023-11-15",
+    "CheckIn": "2023-12-02",
+    "CheckOut": "2023-12-07",
+    "SpecialRequest": "Extra towels",
+    "RoomType": "Double Bed",
+    "RoomNumber": "106",
+    "Status": "Check Out"
+  },
+  {
+    "Name": "David Wilson",
+    "id": "007",
+    "OrderDate": "2020-02-18",
+    "CheckIn": "2020-03-20",
+    "CheckOut": "2020-03-25",
+    "SpecialRequest": "Non-smoking room",
+    "RoomType": "Double Superior",
+    "RoomNumber": "107",
+    "Status": "Check In"
+  },
+  {
+    "Name": "Linda Anderson",
+    "id": "008",
+    "OrderDate": "2021-04-05",
+    "CheckIn": "2021-05-15",
+    "CheckOut": "2021-05-20",
+    "SpecialRequest": "Late check-in at 11 PM",
+    "RoomType": "Suite",
+    "RoomNumber": "108",
+    "Status": "In Progress"
+  },
+  {
+    "Name": "James Taylor",
+    "id": "009",
+    "OrderDate": "2022-06-11",
+    "CheckIn": "2022-07-10",
+    "CheckOut": "2022-07-15",
+    "SpecialRequest": "Sea view room",
+    "RoomType": "Single Bed",
+    "RoomNumber": "109",
+    "Status": "Check Out"
+  },
+  {
+    "Name": "Sarah Moore",
+    "id": "010",
+    "OrderDate": "2024-08-19",
+    "CheckIn": "2024-09-21",
+    "CheckOut": "2024-09-26",
+    "SpecialRequest": "King-sized bed",
+    "RoomType": "Double Bed",
+    "RoomNumber": "110",
+    "Status": "Check In"
+  }
+]
