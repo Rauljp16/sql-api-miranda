@@ -4,22 +4,44 @@
 //import { createBookings } from "./services/bookingServices";
 import { faker } from "@faker-js/faker";
 import { Icontact, Iroom, Iuser, Ibooking } from "./types/global";
-// import mongoose from "mongoose";
+//import mysql from "mysql2";
 import "dotenv/config";
+import { connection } from "./db";
 
-// run().catch((err) => console.log(err));
+// export const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: `${process.env.MYSQL_USER}`,
+//     password: `${process.env.MYSQL_PASSWORD}`,
+//     database: "hotel_miranda"
+// })
 
-// export async function run() {
-//     try {
-//         await mongoose.connect(process.env.MONGO_URL as string);
-//         //createUsers(createRandomUsers(5));
-//         //createRooms(createRandomRoom(2));
-//         //createContacts(createRandomContact(5));
-//         //createBookings(createRandomBooking(10));
-//     } catch (error) {
-//         console.error("Error in run function:", error);
-//     }
-// }
+
+export async function run() {
+    try {
+        connection.connect(err => {
+            if (err) {
+                console.log("Error de conexion: " + err)
+                throw err
+            } else {
+                console.log("Conexion a la base de datos exitosaa.");
+            }
+        })
+        //createUsers(createRandomUsers(5));
+        //createRooms(createRandomRoom(3));
+        //createContacts(createRandomContact(5));
+        //createBookings(createRandomBooking(10
+
+    } catch (error) {
+        console.error("Error in run function:", error);
+    }
+}
+run().catch((err) => console.log(err));
+
+// connection.query('SELECT * FROM rooms', (error, results) => {
+//     if (error) throw error;
+//     console.log("resultados de la query:" + results);
+//     connection.end();
+// });
 
 export function createRandomUsers(count: number): Iuser[] {
     const generateDescription = (name: string) => {
@@ -57,19 +79,21 @@ export function createRandomRoom(count: number): Iroom[] {
         Foto: faker.image.urlLoremFlickr({ category: 'hotel-rooms' }),
         number: faker.string.binary(),
         BedType: faker.word.words(),
-        Facilities: faker.helpers.arrayElements([
+        Facilities: JSON.stringify(faker.helpers.arrayElements([
             "TV",
             "WiFi",
             "Baño privado",
             "Aire acondicionado",
             "Minibar",
-        ]),
+        ])),
         Rate: faker.number.int({ min: 10, max: 100 }),
         OfferPrice: faker.number.int({ min: 10, max: 100 }),
         Status: faker.helpers.arrayElement(["Booked", "Available"]),
-        RoomFloor: "Floor A-1",
+        RoomFloor: "Floor 1",
     });
     const rooms: Iroom[] = Array.from({ length: count }, userGenerator);
+
+
 
     return rooms;
 }

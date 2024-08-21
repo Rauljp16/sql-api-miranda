@@ -1,40 +1,105 @@
-import { Iroom } from '../types/global';
-import RoomModel from '../models/roomModel';
-import mongoose from 'mongoose';
+import { Iroom } from "../types/global";
+import { connection } from "../db";
 
 
+// Obtener todas las habitaciones
 export const allRooms = async (): Promise<Iroom[]> => {
-    const allRooms = await RoomModel.find()
-    return allRooms;
+    return new Promise((resolve, reject) => {
+        connection.query('SELECT * FROM rooms', (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results as Iroom[]);
+            }
+        });
+    });
 };
 
+// Obtener habitación por ID
 export const roomById = async (id: string): Promise<Iroom | undefined> => {
-    const room = await RoomModel.findById(id)
-    if (!room) {
-        throw new Error("Cannont find rooms")
-    }
-    return room
+    return new Promise((resolve, reject) => {
+        connection.query('SELECT * FROM rooms WHERE id = ?', [id], (error, results: any) => {
+            if (error) {
+                reject(error);
+            } else {
+                // Asegurarse de que `results[0]` sea del tipo `Iroom`
+                resolve(results[0] as Iroom);
+            }
+        });
+    });
 };
 
-export const createRoom = (room: Iroom | Iroom[]) => {
-    const newRoom = new RoomModel(room)
-    newRoom.save()
-    return newRoom
-}
-
+// Crear múltiples habitaciones
 export const createRooms = async (rooms: Iroom[]): Promise<Iroom[]> => {
-    const createdRooms = await RoomModel.insertMany(rooms);
-    return createdRooms;
+    const values = rooms.map((room) => [
+        room.Foto,
+        room.number,
+        room.BedType,
+        room.Facilities,
+        room.Rate,
+        room.OfferPrice,
+        room.Status,
+        room.RoomFloor,
+    ]);
+
+    const placeholders = rooms.map(() => "(?,?,?,?,?,?,?,?)").join(", ");
+
+    const query = `INSERT INTO rooms (Foto, number, BedType, Facilities, Rate, OfferPrice, Status, RoomFloor) VALUES ${placeholders}`;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, values.flat(), (err, results) => {
+            if (err) {
+                console.error("Error al insertar: " + err.stack);
+                reject(err);
+            } else {
+                console.log("Habitaciones insertadas:", results);
+                resolve(rooms);
+            }
+        });
+    });
 };
 
-export const updateRoom = async (id: string, body: Partial<Iroom>): Promise<Iroom | null> => {
-    const objectId = new mongoose.Types.ObjectId(id);
-    const updatedRoom = await RoomModel.findOneAndUpdate({ _id: objectId }, body, { new: true });
-    return updatedRoom;
+// Actualizar una habitación
+export const updateRoom = async (
+    id: string,
+    body: Partial<Iroom>
+): Promise<Iroom | null> => {
+    const updates = Object.entries(body)
+        .map(([key, _value]) => `${key} = ?`)
+        .join(", ");
+
+    const values = [...Object.values(body), id];
+
+    const query = `UPDATE rooms SET ${updates} WHERE id = ?`;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error, results: any) => {
+            if (error) {
+                reject(error);
+            } else {
+                if (results.affectedRows > 0) {
+                    resolve({ ...body, id } as Iroom);
+                } else {
+                    resolve(null);
+                }
+            }
+        });
+    });
 };
 
-export const deleteRoom = async (id: string): Promise<Iroom | null> => {
-    const objectId = new mongoose.Types.ObjectId(id);
-    const delRoom = await RoomModel.findByIdAndDelete(objectId)
-    return delRoom
-}
+// Eliminar una habitación
+export const deleteRoom = async (_id: string): Promise<Iroom | null> => {
+    return new Promise((resolve, reject) => {
+        connection.query('DELETE FROM rooms WHERE _id = ?', [_id], (error, results: any) => {
+            if (error) {
+                reject(error);
+            } else {
+                if (results.affectedRows > 0) {
+                    resolve({ _id } as Iroom);
+                } else {
+                    resolve(null);
+                }
+            }
+        });
+    });
+};

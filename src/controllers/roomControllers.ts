@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import {
     allRooms,
     roomById,
-    createRoom,
+    createRooms,
     updateRoom,
     deleteRoom,
 } from "../services/roomServices";
@@ -17,7 +17,7 @@ router.get("/", async (_req: Request, res: Response, _next: NextFunction) => {
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
         const body = req.body;
-        const newRoom = await createRoom(body);
+        const newRoom = await createRooms(body);
         return res.json({ newRoom });
     } catch (e) {
         next(e);

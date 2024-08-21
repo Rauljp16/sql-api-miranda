@@ -76,10 +76,11 @@ export interface Icontact {
   comment: string;
 }
 export interface Iroom {
+  _id?: string;
   Foto: string;
   number: string;
   BedType: string;
-  Facilities: string[];
+  Facilities: any;
   Rate: number;
   OfferPrice: number;
   Status: string;
