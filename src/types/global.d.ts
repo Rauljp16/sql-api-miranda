@@ -77,12 +77,13 @@ export interface Icontact {
 }
 export interface Iroom {
   _id?: string;
-  Foto: string;
-  number: string;
-  BedType: string;
-  Facilities: any;
+  Foto?: any;
+  number: number;
+  BedType: number;
+  //Facilities: any;
+  Amenities: number;
   Rate: number;
   OfferPrice: number;
   Status: string;
-  RoomFloor: string;
+  RoomFloor: number;
 }

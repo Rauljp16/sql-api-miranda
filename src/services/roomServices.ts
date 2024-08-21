@@ -1,5 +1,6 @@
 import { Iroom } from "../types/global";
-import { connection } from "../db";
+import { connection } from "../db/db";
+import mysql from 'mysql2';
 
 
 // Obtener todas las habitaciones
@@ -35,16 +36,16 @@ export const createRooms = async (rooms: Iroom[]): Promise<Iroom[]> => {
         room.Foto,
         room.number,
         room.BedType,
-        room.Facilities,
+        // room.Facilities,
         room.Rate,
         room.OfferPrice,
         room.Status,
         room.RoomFloor,
     ]);
 
-    const placeholders = rooms.map(() => "(?,?,?,?,?,?,?,?)").join(", ");
+    const placeholders = rooms.map(() => "(?,?,?,?,?,?)").join(", ");
 
-    const query = `INSERT INTO rooms (Foto, number, BedType, Facilities, Rate, OfferPrice, Status, RoomFloor) VALUES ${placeholders}`;
+    const query = `INSERT INTO rooms ( number, BedType, Rate, OfferPrice, Status, RoomFloor) VALUES ${placeholders}`;
 
     return new Promise((resolve, reject) => {
         connection.query(query, values.flat(), (err, results) => {
@@ -53,6 +54,8 @@ export const createRooms = async (rooms: Iroom[]): Promise<Iroom[]> => {
                 reject(err);
             } else {
                 console.log("Habitaciones insertadas:", results);
+                console.log("resolve room:" + rooms);
+                console.log("este es el ID:" + results);
                 resolve(rooms);
             }
         });

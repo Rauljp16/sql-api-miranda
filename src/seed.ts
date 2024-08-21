@@ -4,44 +4,69 @@
 //import { createBookings } from "./services/bookingServices";
 import { faker } from "@faker-js/faker";
 import { Icontact, Iroom, Iuser, Ibooking } from "./types/global";
-//import mysql from "mysql2";
 import "dotenv/config";
-import { connection } from "./db";
-
-// export const connection = mysql.createConnection({
-//     host: 'localhost',
-//     user: `${process.env.MYSQL_USER}`,
-//     password: `${process.env.MYSQL_PASSWORD}`,
-//     database: "hotel_miranda"
-// })
-
+import { RowDataPacket } from "mysql2";
+import { connection } from "./db/db";
 
 export async function run() {
     try {
-        connection.connect(err => {
+        connection.connect((err) => {
             if (err) {
-                console.log("Error de conexion: " + err)
-                throw err
+                console.log("Error de conexion: " + err);
+                throw err;
             } else {
                 console.log("Conexion a la base de datos exitosaa.");
             }
-        })
+        });
         //createUsers(createRandomUsers(5));
-        //createRooms(createRandomRoom(3));
+        //createRooms(createRandomRoom(1));
         //createContacts(createRandomContact(5));
         //createBookings(createRandomBooking(10
-
     } catch (error) {
         console.error("Error in run function:", error);
     }
 }
 run().catch((err) => console.log(err));
 
-// connection.query('SELECT * FROM rooms', (error, results) => {
-//     if (error) throw error;
-//     console.log("resultados de la query:" + results);
-//     connection.end();
-// });
+connection.query(
+    `SELECT
+        r._id,
+        r.number,
+        r.RoomType,
+        r.Rate,
+        r.OfferPrice,
+        r.Status,
+        r.RoomFloor,
+        GROUP_CONCAT(DISTINCT a.amenity) AS Amenities
+    FROM
+        rooms r
+    LEFT JOIN
+        rooms_amenities ra ON r._id = ra.room_id
+    LEFT JOIN
+        amenities a ON ra.amenity_id = a._id
+    WHERE
+        r._id = 7
+    GROUP BY
+        r._id, r.number, r.RoomType, r.Rate, r.OfferPrice, r.Status, r.RoomFloor`,
+    (error, results) => {
+        if (error) throw error;
+
+        // Casteamos los resultados a RowDataPacket[]
+        const rows = results as RowDataPacket[];
+
+        // Procesamos los resultados para convertir Amenities a un array
+        const processedResults = rows.map((row) => {
+            return {
+                ...row,
+                Amenities: row.Amenities ? row.Amenities.split(",") : [], // Convertimos el string a array
+            };
+        });
+
+        // Imprimimos los resultados procesados
+        console.log("Resultados procesados: ", processedResults);
+        connection.end();
+    }
+);
 
 export function createRandomUsers(count: number): Iuser[] {
     const generateDescription = (name: string) => {
@@ -50,23 +75,24 @@ export function createRandomUsers(count: number): Iuser[] {
             "ha estado con nosotros desde",
             "le gusta visitar",
             "siempre disfruta de nuestras instalaciones en",
-            "es conocido por su amabilidad en"
-        ]; const place = faker.location.city();
+            "es conocido por su amabilidad en",
+        ];
+        const place = faker.location.city();
         const adjective = faker.word.adjective();
-        return `${name} ${activities[Math.floor(Math.random() * activities.length)]} ${place}. Es ${adjective}.`;
+        return `${name} ${activities[Math.floor(Math.random() * activities.length)]
+            } ${place}. Es ${adjective}.`;
     };
     const name = faker.person.fullName();
 
     const userGenerator = (): Iuser => ({
         foto: faker.image.avatarGitHub(),
         name: name,
-        startDate: faker.date.past().toISOString().split('T')[0],
+        startDate: faker.date.past().toISOString().split("T")[0],
         description: generateDescription(name),
         email: faker.internet.email(),
         contact: faker.phone.number(),
         status: faker.helpers.arrayElement(["INACTIVE", "ACTIVE"]),
         password: faker.internet.password(),
-
     });
 
     const users: Iuser[] = Array.from({ length: count }, userGenerator);
@@ -76,24 +102,23 @@ export function createRandomUsers(count: number): Iuser[] {
 
 export function createRandomRoom(count: number): Iroom[] {
     const userGenerator = (): Iroom => ({
-        Foto: faker.image.urlLoremFlickr({ category: 'hotel-rooms' }),
-        number: faker.string.binary(),
-        BedType: faker.word.words(),
-        Facilities: JSON.stringify(faker.helpers.arrayElements([
-            "TV",
-            "WiFi",
-            "Baño privado",
-            "Aire acondicionado",
-            "Minibar",
-        ])),
+        Foto: faker.number.int({ min: 1, max: 3 }),
+        number: faker.number.int({ min: 1, max: 15 }),
+        BedType: faker.number.int({ min: 1, max: 4 }),
+        Amenities: faker.number.int({ min: 1, max: 5 }),
+        // Facilities: JSON.stringify(faker.helpers.arrayElements([
+        //     "TV",
+        //     "WiFi",
+        //     "Baño privado",
+        //     "Aire acondicionado",
+        //     "Minibar",
+        // ])),
         Rate: faker.number.int({ min: 10, max: 100 }),
         OfferPrice: faker.number.int({ min: 10, max: 100 }),
         Status: faker.helpers.arrayElement(["Booked", "Available"]),
-        RoomFloor: "Floor 1",
+        RoomFloor: faker.number.int({ min: 1, max: 4 }),
     });
     const rooms: Iroom[] = Array.from({ length: count }, userGenerator);
-
-
 
     return rooms;
 }
