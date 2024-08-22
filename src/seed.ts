@@ -1,25 +1,15 @@
 //import { createUsers } from "./services/userServices";
-//import { createRooms } from "./services/roomServices";
+import { createRooms } from "./services/roomServices";
 //import { createContacts } from "./services/contactServices";
 //import { createBookings } from "./services/bookingServices";
 import { faker } from "@faker-js/faker";
 import { Icontact, Iroom, Iuser, Ibooking } from "./types/global";
 import "dotenv/config";
-import { RowDataPacket } from "mysql2";
-import { connection } from "./db/db";
-
+//import { RowDataPacket } from "mysql2";
 export async function run() {
     try {
-        connection.connect((err) => {
-            if (err) {
-                console.log("Error de conexion: " + err);
-                throw err;
-            } else {
-                console.log("Conexion a la base de datos exitosaa.");
-            }
-        });
         //createUsers(createRandomUsers(5));
-        //createRooms(createRandomRoom(1));
+        createRooms(createRandomRoom(2));
         //createContacts(createRandomContact(5));
         //createBookings(createRandomBooking(10
     } catch (error) {
@@ -28,45 +18,45 @@ export async function run() {
 }
 run().catch((err) => console.log(err));
 
-connection.query(
-    `SELECT
-        r._id,
-        r.number,
-        r.RoomType,
-        r.Rate,
-        r.OfferPrice,
-        r.Status,
-        r.RoomFloor,
-        GROUP_CONCAT(DISTINCT a.amenity) AS Amenities
-    FROM
-        rooms r
-    LEFT JOIN
-        rooms_amenities ra ON r._id = ra.room_id
-    LEFT JOIN
-        amenities a ON ra.amenity_id = a._id
-    WHERE
-        r._id = 7
-    GROUP BY
-        r._id, r.number, r.RoomType, r.Rate, r.OfferPrice, r.Status, r.RoomFloor`,
-    (error, results) => {
-        if (error) throw error;
+// connection.query(
+//     `SELECT
+//         r._id,
+//         r.number,
+//         r.RoomType,
+//         r.Rate,
+//         r.OfferPrice,
+//         r.Status,
+//         r.RoomFloor,
+//         GROUP_CONCAT(DISTINCT a.amenity) AS Amenities
+//     FROM
+//         rooms r
+//     LEFT JOIN
+//         rooms_amenities ra ON r._id = ra.room_id
+//     LEFT JOIN
+//         amenities a ON ra.amenity_id = a._id
+//     WHERE
+//         r._id = 7
+//     GROUP BY
+//         r._id, r.number, r.RoomType, r.Rate, r.OfferPrice, r.Status, r.RoomFloor`,
+//     (error, results) => {
+//         if (error) throw error;
 
-        // Casteamos los resultados a RowDataPacket[]
-        const rows = results as RowDataPacket[];
+//         // Casteamos los resultados a RowDataPacket[]
+//         const rows = results as RowDataPacket[];
 
-        // Procesamos los resultados para convertir Amenities a un array
-        const processedResults = rows.map((row) => {
-            return {
-                ...row,
-                Amenities: row.Amenities ? row.Amenities.split(",") : [], // Convertimos el string a array
-            };
-        });
+//         // Procesamos los resultados para convertir Amenities a un array
+//         const processedResults = rows.map((row) => {
+//             return {
+//                 ...row,
+//                 Amenities: row.Amenities ? row.Amenities.split(",") : [], // Convertimos el string a array
+//             };
+//         });
 
-        // Imprimimos los resultados procesados
-        console.log("Resultados procesados: ", processedResults);
-        connection.end();
-    }
-);
+//         // Imprimimos los resultados procesados
+//         console.log("Resultados procesados: ", processedResults);
+//         connection.end();
+//     }
+// );
 
 export function createRandomUsers(count: number): Iuser[] {
     const generateDescription = (name: string) => {
@@ -104,7 +94,7 @@ export function createRandomRoom(count: number): Iroom[] {
     const userGenerator = (): Iroom => ({
         Foto: faker.number.int({ min: 1, max: 3 }),
         number: faker.number.int({ min: 1, max: 15 }),
-        BedType: faker.number.int({ min: 1, max: 4 }),
+        RoomType: faker.number.int({ min: 1, max: 4 }),
         Amenities: faker.number.int({ min: 1, max: 5 }),
         // Facilities: JSON.stringify(faker.helpers.arrayElements([
         //     "TV",

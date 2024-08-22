@@ -79,8 +79,7 @@ export interface Iroom {
   _id?: string;
   Foto?: any;
   number: number;
-  BedType: number;
-  //Facilities: any;
+  RoomType: number;
   Amenities: number;
   Rate: number;
   OfferPrice: number;

@@ -1,6 +1,7 @@
-import { Iroom } from "../types/global";
+import { Iroom } from '../types/global';
 import { connection } from "../db/db";
-import mysql from 'mysql2';
+import { insertDb } from "../db/utils";
+//import { insertDb } from "../db/utils";
 
 
 // Obtener todas las habitaciones
@@ -19,7 +20,7 @@ export const allRooms = async (): Promise<Iroom[]> => {
 // Obtener habitación por ID
 export const roomById = async (id: string): Promise<Iroom | undefined> => {
     return new Promise((resolve, reject) => {
-        connection.query('SELECT * FROM rooms WHERE id = ?', [id], (error, results: any) => {
+        connection.query('SELECT * FROM rooms WHERE _id = ?', parseInt(id), (error, results: any) => {
             if (error) {
                 reject(error);
             } else {
@@ -30,37 +31,16 @@ export const roomById = async (id: string): Promise<Iroom | undefined> => {
     });
 };
 
-// Crear múltiples habitaciones
-export const createRooms = async (rooms: Iroom[]): Promise<Iroom[]> => {
-    const values = rooms.map((room) => [
-        room.Foto,
-        room.number,
-        room.BedType,
-        // room.Facilities,
-        room.Rate,
-        room.OfferPrice,
-        room.Status,
-        room.RoomFloor,
-    ]);
-
-    const placeholders = rooms.map(() => "(?,?,?,?,?,?)").join(", ");
-
-    const query = `INSERT INTO rooms ( number, BedType, Rate, OfferPrice, Status, RoomFloor) VALUES ${placeholders}`;
-
-    return new Promise((resolve, reject) => {
-        connection.query(query, values.flat(), (err, results) => {
-            if (err) {
-                console.error("Error al insertar: " + err.stack);
-                reject(err);
-            } else {
-                console.log("Habitaciones insertadas:", results);
-                console.log("resolve room:" + rooms);
-                console.log("este es el ID:" + results);
-                resolve(rooms);
-            }
-        });
+// Crear múltiples habitaciones metodo John con la function de utils
+export const createRooms = async (rooms: Iroom[]) => {
+    return new Promise((resolve) => {
+        resolve(rooms);
+        rooms.map((room: any) => {
+            insertDb("rooms", room)
+            console.log(room);
+        })
     });
-};
+}
 
 // Actualizar una habitación
 export const updateRoom = async (
