@@ -9,7 +9,7 @@ import "dotenv/config";
 export async function run() {
     try {
         //createUsers(createRandomUsers(5));
-        createRooms(createRandomRoom(2));
+        createRooms(createRandomRoom(4));
         //createContacts(createRandomContact(5));
         //createBookings(createRandomBooking(10
     } catch (error) {

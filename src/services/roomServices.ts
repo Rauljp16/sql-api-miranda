@@ -56,7 +56,7 @@ export const updateRoom = async (
 
     const values = [...Object.values(body), id];
 
-    const query = `UPDATE rooms SET ${updates} WHERE id = ?`;
+    const query = `UPDATE rooms SET ${updates} WHERE _id = ?`;
 
     return new Promise((resolve, reject) => {
         connection.query(query, values, (error, results: any) => {
