@@ -18,45 +18,6 @@ export async function run() {
 }
 run().catch((err) => console.log(err));
 
-// connection.query(
-//     `SELECT
-//         r._id,
-//         r.number,
-//         r.RoomType,
-//         r.Rate,
-//         r.OfferPrice,
-//         r.Status,
-//         r.RoomFloor,
-//         GROUP_CONCAT(DISTINCT a.amenity) AS Amenities
-//     FROM
-//         rooms r
-//     LEFT JOIN
-//         rooms_amenities ra ON r._id = ra.room_id
-//     LEFT JOIN
-//         amenities a ON ra.amenity_id = a._id
-//     WHERE
-//         r._id = 7
-//     GROUP BY
-//         r._id, r.number, r.RoomType, r.Rate, r.OfferPrice, r.Status, r.RoomFloor`,
-//     (error, results) => {
-//         if (error) throw error;
-
-//         // Casteamos los resultados a RowDataPacket[]
-//         const rows = results as RowDataPacket[];
-
-//         // Procesamos los resultados para convertir Amenities a un array
-//         const processedResults = rows.map((row) => {
-//             return {
-//                 ...row,
-//                 Amenities: row.Amenities ? row.Amenities.split(",") : [], // Convertimos el string a array
-//             };
-//         });
-
-//         // Imprimimos los resultados procesados
-//         console.log("Resultados procesados: ", processedResults);
-//         connection.end();
-//     }
-// );
 
 export function createRandomUsers(count: number): Iuser[] {
     const generateDescription = (name: string) => {
